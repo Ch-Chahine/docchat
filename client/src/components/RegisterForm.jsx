@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function RegisterForm({ onLoggedIn }) {
+function RegisterForm({ onLoggedIn, disabled }) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -21,11 +21,12 @@ function RegisterForm({ onLoggedIn }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Name <input value={name} onChange={(e) => setName(e.target.value)} /></label>
-      <label>Email <input value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-      <label>Password <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-      <button>Create account</button>
+      <label>Name <input value={name} onChange={(e) => setName(e.target.value)} disabled={disabled} /></label>
+      <label>Email <input value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled} /></label>
+      <label>Password <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled} /></label>
+      <button disabled={disabled}>Create account</button>
       {error && <p role="alert">{error}</p>}  {/* role=alert = screen readers announce it */}
+      {disabled && <p role="note">Sign-up is disabled for this educational demo — new accounts can't be created on the live site. Use an account made during development.</p>}
     </form>
   );
 }

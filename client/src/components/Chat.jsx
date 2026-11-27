@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';   // added useEffect
 
 function Chat({ documentId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!documentId) return;                                    // nothing to load until a document is active
+    fetch(`/api/history?documentId=${documentId}`, { credentials: 'include' })   // credentials: send the session cookie
+      .then((r) => r.json())                                    // parse the server's JSON reply
+      .then((data) =>                                           // data.history is the saved rows, oldest first
+        setMessages(data.history.map((m) => ({ role: m.role, text: m.text })))  // reshape to what the chat renders
+      );
+  }, [documentId]);                                             // re-run this effect each time the active document changes
 
   async function send(e) {
     e.preventDefault();
